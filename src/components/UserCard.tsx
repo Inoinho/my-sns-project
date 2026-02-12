@@ -1,5 +1,5 @@
 import {UserProfile} from '../types/user';
-import {motion, scale} from 'framer-motion';
+import {motion, HTMLMotionProps} from 'framer-motion';
 
 export function UserCard({user, onDelete, onSwap, ...rest}: UserCardProps) {
   return (
@@ -8,7 +8,7 @@ export function UserCard({user, onDelete, onSwap, ...rest}: UserCardProps) {
       layout
       initial={{opacity: 0, scale: 0.9}}
       animate={{opacity: 1, scale: 1}}
-      exit={{opacity: 0, scale: 0.5, transition: {duratino: 0.2}}}
+      exit={{opacity: 0, scale: 0.5, transition: {duration: 0.2}}}
       transition={{
         layout: {type: 'spring', stiffness: 300, damping: 30},
         opacity: {duration: 0.2},
@@ -67,7 +67,7 @@ export function UserCard({user, onDelete, onSwap, ...rest}: UserCardProps) {
   );
 }
 
-export interface UserCardProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface UserCardProps extends HTMLMotionProps<'div'> {
   user: UserProfile;
   onDelete: (id: string) => void;
   onSwap: (id: string) => void;
