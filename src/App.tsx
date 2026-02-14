@@ -29,7 +29,7 @@ function App() {
     );
   });
 
-  const address = 'https://my-sns-backend-ocxj.onrender.com/api/users/';
+  const address = 'https://my-sns-backend-ocxj.onrender.com/api/users';
   // const address = 'http://localhost:8080/api/users/';
 
   useEffect(() => {
@@ -82,7 +82,7 @@ function App() {
 
   const deleteUser = async (id: number) => {
     try {
-      const response = await fetch(`${address}${id}`, {
+      const response = await fetch(`${address}/${id}`, {
         method: 'DELETE',
       });
       if (response.ok) {
@@ -97,7 +97,7 @@ function App() {
   const addUser = async (newUser: UserProfile) => {
     const {id, ...noidUser} = newUser;
     try {
-      const response = await fetch(`${address}users`, {
+      const response = await fetch(`${address}/users`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(noidUser),
