@@ -69,6 +69,6 @@ export function UserCard({user, onDelete, onSwap, ...rest}: UserCardProps) {
 
 export interface UserCardProps extends HTMLMotionProps<'div'> {
   user: UserProfile;
-  onDelete: (id: string) => void;
-  onSwap: (id: string) => void;
+  onDelete: (id: number) => void;
+  onSwap: (id: number) => void;
 }

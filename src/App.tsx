@@ -34,20 +34,20 @@ function App() {
       try {
         setLoading(true);
         const response = await fetch(
-          'https://jsonplaceholder.typicode.com/users',
+          // 'https://jsonplaceholder.typicode.com/users',
+          'http://localhost:8080/api/users',
         );
         const data = await response.json();
-        const formattedUsers: UserProfile[] = data.map((user: any) => ({
-          id: String(user.id),
-          name: user.name,
-          email: user.email,
-          avatar: `https://i.pravatar.cc/150?u=${user.id}`, // 랜덤 아바타 서비스 이용
-          postImage: `https://picsum.photos/seed/${user.id}/600/400`, // 랜덤 사진 서비스 이용
-          bio: `${user.company.catchPhrase} - working at ${user.company.name}`,
-          isGoldMember: user.id % 3 === 0, // 3의 배수 아이디만 골드 멤버로 설정
-        }));
-        console.log(data);
-        setUsers(formattedUsers);
+        // const formattedUsers: UserProfile[] = data.map((user: any) => ({
+        //   id: String(user.id),
+        //   name: user.name,
+        //   email: user.email,
+        //   avatar: `https://i.pravatar.cc/150?u=${user.id}`, // 랜덤 아바타 서비스 이용
+        //   postImage: `https://picsum.photos/seed/${user.id}/600/400`, // 랜덤 사진 서비스 이용
+        //   bio: `${user.company.catchPhrase} - working at ${user.company.name}`,
+        //   isGoldMember: user.id % 3 === 0, // 3의 배수 아이디만 골드 멤버로 설정
+        // }));
+        setUsers(data);
       } catch (error) {
         console.error('데이터를 가져오는데 실패했어요!', error);
       } finally {
@@ -76,11 +76,43 @@ function App() {
     }
   }, [isDark]);
 
+  const deleteUser = async (id: number) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/users/${id}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        setUsers((users) => users.filter((u) => u.id !== id));
+      }
+    } catch (error) {
+      console.error('데이터를 삭제하는데 실패했어요!', error);
+    } finally {
+    }
+  };
+
+  const addUser = async (newUser: UserProfile) => {
+    const {id, ...noidUser} = newUser;
+    try {
+      const response = await fetch(`http://localhost:8080/api/users`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(noidUser),
+      });
+      if (response.ok) {
+        const savedUser = await response.json();
+        setUsers((users) => [...users, savedUser]);
+      }
+    } catch (error) {
+      console.error('데이터를 추가하는데 실패했어요!', error);
+    } finally {
+    }
+  };
+
   return (
     <Layout
       id="sns-root"
       onAdd={function (newUser: UserProfile) {
-        setUsers((users) => [...users, newUser]);
+        addUser(newUser);
       }}
       onSearch={(search: string) => {
         setSearch(search);
@@ -125,10 +157,10 @@ function App() {
               <UserCard
                 key={user.id}
                 user={user}
-                onDelete={(id: string) => {
-                  setUsers((users) => users.filter((u) => u.id !== id));
+                onDelete={(id: number) => {
+                  deleteUser(id);
                 }}
-                onSwap={(id: string) => {
+                onSwap={(id: number) => {
                   setUsers((users) =>
                     users.map((u) =>
                       u.id === id ? {...u, isGoldMember: !u.isGoldMember} : u,
