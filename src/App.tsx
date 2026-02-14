@@ -97,7 +97,7 @@ function App() {
   const addUser = async (newUser: UserProfile) => {
     const {id, ...noidUser} = newUser;
     try {
-      const response = await fetch(`${address}/users`, {
+      const response = await fetch(`${address}`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(noidUser),
