@@ -29,13 +29,17 @@ function App() {
     );
   });
 
+  const address = 'https://my-sns-backend-ocxj.onrender.com/api/users/';
+  // const address = 'http://localhost:8080/api/users/';
+
   useEffect(() => {
     const fechUsers = async () => {
       try {
         setLoading(true);
         const response = await fetch(
           // 'https://jsonplaceholder.typicode.com/users',
-          'http://localhost:8080/api/users',
+          // 'http://localhost:8080/api/users',
+          address,
         );
         const data = await response.json();
         // const formattedUsers: UserProfile[] = data.map((user: any) => ({
@@ -78,7 +82,7 @@ function App() {
 
   const deleteUser = async (id: number) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/users/${id}`, {
+      const response = await fetch(`${address}${id}`, {
         method: 'DELETE',
       });
       if (response.ok) {
@@ -93,7 +97,7 @@ function App() {
   const addUser = async (newUser: UserProfile) => {
     const {id, ...noidUser} = newUser;
     try {
-      const response = await fetch(`http://localhost:8080/api/users`, {
+      const response = await fetch(`${address}users`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(noidUser),
